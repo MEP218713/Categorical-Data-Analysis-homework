@@ -1,0 +1,48 @@
+four_gird_test=function(x,alternative="twoside")
+  #适用于单侧给定、总样本容量给定、完全随机时四格表的检验问题
+  #x为四格表矩阵；alternative对应于备择假设
+{
+  if(alternative=="twoside")
+  {chisq.test(x,correct = F)}
+  else 
+  {
+    U=sqrt(sum(x))*(x[1]*x[4]-x[2]*x[3])/sqrt(((x[1]+x[2])*(x[3]+x[4])*(x[1]+x[3])*(x[2]+x[4])))  #卡方统计量
+    if(alternative=="greater")
+    {p_value=pnorm(-U);p_value}
+    else if(alternative=="less")
+    {p_value=pnorm(U);p_value}
+    else{cat("please input:\n alternative= 'twoside','greater',or'less'")}
+  }
+}
+
+
+##第一问
+#原假设H0:两种服用方式的治疗作用相当
+N1=519;N2=370
+x=matrix(c(519*0.051,370*0.054,519*(1-0.051),370*(1-0.054)),nrow=2)
+four_gird_test(x,alternative="twoside")
+#由结果可知，p-value=0.84>0.1，接受原假设
+
+##第二问
+#第一个表的第一行数据
+a=0.079*1022
+b=0.15*1005
+y1=matrix(c(a,1022-a,b,1005-b),nrow=2)
+four_gird_test(y1,alternative="twoside")
+#由结果可知，p-value=5.035e-07<0.001，故显示***
+
+#第一个表的最后一行数据
+a=0.022*1022
+b=0.041*1005
+y1=matrix(c(a,1022-a,b,1005-b),nrow=2)
+four_gird_test(y1,alternative="twoside")
+#由结果可知，p-value=0.01422<=0.05，故显示*
+#其他行数据的p值，同理可得
+
+#第二个表的第一行数据
+a=0.129*2214
+b=0.162*2218
+z=matrix(c(a,2214-a,b,2218-b),nrow=2)
+four_gird_test(z,alternative="twoside")
+#由结果可知，p-value=0.001839<=0.01，故显示**
+#其他行数据的p值，同理可得

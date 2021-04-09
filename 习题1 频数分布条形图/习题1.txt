@@ -1,0 +1,54 @@
+#【q1】:
+a<- read.csv("C:/Users/LCC/Desktop/研究生学习/10定性数据统计分析/习题一作业/q1.csv",header = F)
+table(a)             #频数分布
+prop.table(table(a)) #频率分布
+barplot(table(a))    #条形图
+pie(table(a))        #饼图(原型图)
+sort(table(a),decreasing = T)          #频数排列
+cumsum(prop.table(table(a)))    #累积百分比
+
+#install.packages("qcc")    #帕累托图 
+library(qcc)
+pareto.chart(sort(table(a),decreasing = T),ylab = "总数",ylab2 = "累计百分比%",main='帕累托图')
+
+#离散程度的描述
+1-max(table(a))/sum(table(a))     #离异比率
+1-sum(prop.table(table(a))^2)     #Gini-Simpson指数
+-sum(prop.table(table(a))*log(prop.table(table(a))))     #熵
+
+
+
+
+
+
+
+
+
+
+
+
+
+#【q2】:(与q1几乎完全相同，只需把目录名q1改为q2即可)
+#【q3】：
+a<- read.csv("C:/Users/LCC/Desktop/研究生学习/10定性数据统计分析/习题一作业/q3.csv",header = T)
+a=rep(1:5, c(a[[1]],a[[2]],a[[3]],a[[4]],a[[5]]))#用字符1、2、3、4、5分别代替五类糖果问题，重造数据
+#之后程序几乎与q1一致
+cumsum(sort(prop.table(table(a)),decreasing = T))    #按重要性排序后的累积百分比
+
+
+
+
+【课堂练习】
+a<-data.frame(operate=27,settings=531,tools=297,gongyi=94,matirial=51)
+a=rep(1:5, c(a[[1]],a[[2]],a[[3]],a[[4]],a[[5]]))#用字符1、2、3、4、5分别代替五类问题，重造数据
+table(a)             #频数分布
+
+#排列图
+install.packages("qcc")    #帕累托图 
+library(qcc)
+pareto.chart(sort(table(a),decreasing = T),ylab = "总数",ylab2 = "累计百分比%",main='帕累托图')
+sort(table(a),decreasing = T) 
+
+
+sort(prop.table(table(a)),decreasing = T)   #频率排列表
+cumsum(sort(prop.table(table(a)),decreasing = T))    #按重要性排序后的累积百分比

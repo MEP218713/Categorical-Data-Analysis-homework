@@ -1,0 +1,94 @@
+#习题二
+#第一题
+x=c(172,124,85,41,36,42)
+p=c(0.3,0.2,0.2,0.1,0.1,0.1)
+n=sum(x)
+z=sum((x-n*p)*(x-n*p)/(n*p))  #卡方统计量
+p_value=1-pchisq(z,5);p_value   #自由度为6-1=5
+#或chisq.test(x,y=NULL,correct = TRUE,p)
+
+#第二题
+x=c(85,41,74)
+chisq.test(x,y=NULL,correct = TRUE,p=rep(1/length(x),length(x)))
+
+#第三题
+x=c(74,92,83,79,80,73,77,75,76,91)
+chisq.test(x,y=NULL,correct = TRUE,p=rep(1/length(x),length(x)))
+
+#第四题
+x=c(1697,1780,2129)
+p=c(0.1,0.2,0.7)
+chisq.test(x,y=NULL,correct = TRUE)
+
+z=c(sum(151,122),240,sum(517,240));y
+chisq.test(z,y=NULL,correct = TRUE,p)
+
+#######第五题
+x=c(24,36,60)
+n=sum(x)
+#手动计算得负对数似然方程nll
+nll<-function(y){
+  -108*log(y[1])-132*log(1-y[1])}
+#解似然方程得p值
+#stats4::mle(minuslogl = nll,start =list(y=0.1))#法一：求解极大似然估计
+a=nlm(nll,c(0.5))                   #法二：求解极大似然估计
+pq=a$estimate;pq
+p=pq[1];p
+q=1-p;q
+phat=c(p^2,q^2,2*p*q)
+z=sum((x-n*phat)*(x-n*phat)/(n*phat));z  #卡方统计量
+p_value=1-pchisq(z,1);p_value   #自由度为3-1-1=1
+
+
+
+
+#######第六题
+x=c(374,436,132,58)
+n=sum(x);n
+#手动计算得负对数似然方程nll
+nll<-function(x){
+  r=1-x[1]-x[2]
+  -(748*log(r)+436*log(x[1]^2+2*x[1]*r)+132*log(x[2]^2+2*x[2]*r)+58*log(2*x[1]*x[2]))
+}
+#解似然方程得p值
+a=nlm(nll,c(0.2,0.2))
+pq=a$estimate  #取出p和q的值
+p=pq[1]
+q=pq[2]
+r=1-p-q
+phat=c(r^2,p^2+2*p*r,q^2+2*q*r,2*p*q)
+z=sum((x-n*phat)*(x-n*phat)/(n*phat))  #卡方统计量
+p_value=1-pchisq(z,1);p_value   #自由度为4-2-1=1
+
+
+#######第七题
+#法一：
+x=c(315,108,101,32)
+n=sum(x);n
+#手动计算得负对数似然方程nll
+nll<-function(p,q){
+  -(315*log((1-(1-p)^2)*(1-(1-q)^2))+108*log(((1-p)^2)*(1-(1-q)^2))+101*log((1-(1-p)^2)*(1-q)^2)+32*log(((1-p)^2)*(1-q)^2))}
+#解似然方程得p值
+stats4::mle(minuslogl = nll,start =list(p=0.5,q=0.5))
+p=0.498
+q=0.511
+phat=c((1-(1-p)^2)*(1-(1-q)^2),((1-p)^2)*(1-(1-q)^2),(1-(1-p)^2)*(1-q)^2,((1-p)^2)*(1-q)^2);phat
+z=sum((x-n*phat)*(x-n*phat)/(n*phat));z  #卡方统计量
+p_value=1-pchisq(z,1);p_value   #自由度为4-2-1=1
+
+
+#法二：
+x=c(315,108,101,32)
+n=sum(x);n
+#手动计算得负对数似然方程nll
+nll<-function(y){
+    -(315*log((1-(1-y[1])^2)*(1-(1-y[2])^2))+108*log(((1-y[1])^2)*(1-(1-y[2])^2))+101*log((1-(1-y[1])^2)*(1-y[2])^2)+32*log(((1-y[1])^2)*(1-y[2])^2))
+}
+#解似然方程得p值
+a=nlm(nll,c(0.5,0.5));a
+pq=a$estimate;pq  #取出p和q的值
+p=pq[1];p
+q=pq[2];q
+phat=c((1-(1-p)^2)*(1-(1-q)^2),((1-p)^2)*(1-(1-q)^2),(1-(1-p)^2)*(1-q)^2,((1-p)^2)*(1-q)^2);phat
+z=sum((x-n*phat)*(x-n*phat)/(n*phat));z  #卡方统计量
+p_value=1-pchisq(z,1);p_value   #自由度为4-2-1=1
