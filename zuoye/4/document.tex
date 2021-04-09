@@ -1,0 +1,97 @@
+\documentclass[11pt,a4paper]{ctexart}
+\usepackage{fontspec}
+\defaultfontfeatures{Mapping=tex-text}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+%\setmainfont{???}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{float}   %{H}
+\usepackage{booktabs}  %\toprule[1.5pt]
+\usepackage[titletoc]{appendix}
+\usepackage{tcolorbox} %彩色框框
+%===================%插入代码需要的控制
+\usepackage{listings}
+\usepackage{listings}
+\usepackage{xcolor}
+\setmonofont{Consolas}%字体
+\lstset{
+	numbers=left, 
+	numberstyle= \tiny, 
+	keywordstyle= \color{ blue!70},
+	commentstyle= \color{red!50!green!50!blue!50}, 
+	frame=shadowbox, % 阴影效果
+	rulesepcolor= \color{ red!20!green!20!blue!20} ,
+	escapeinside=``,% 英文分号中可写入中文
+	breaklines=true,
+	basicstyle=\ttfamily 
+} 
+%===================%
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+\newtheorem{theorem}{定理}
+\newtheorem{definition}{定义}
+\newtheorem*{solution}{解}
+
+\title{定性数据统计分析作业 (4)}
+\author{钟瑜 \quad 222018314210044}
+\date{\today}
+\begin{document}
+\maketitle
+\pagestyle{plain}%设置页码
+%==================================================================================%
+\begin{figure}[H]
+	\includegraphics[width=0.7\textwidth]{1.png}
+\end{figure}
+\begin{solution}
+四格表如下所示:
+\begin{table}[!htbp]   %[H]
+	\centering
+	\begin{tabular}{cccc}
+		\toprule[1.5pt]
+		 & $ A $  & $ B $ & 合计\\
+		\midrule[1pt]
+		良好& 53 & 783 & 100\\
+		非良好 & 47  & 117 & 900\\
+		\midrule[1pt]
+		合计 & 836 & 164 & 1000\\
+		\bottomrule[1.5pt]
+	\end{tabular}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{table}[!htbp]   %[H]
+%	\centering
+%	\begin{tabular}{cccc}
+%		\toprule[1.5pt]
+%		& 有疾病(B) & 无疾病($\bar{B}$) & 合计\\
+%		\midrule[1pt]
+%		处理组(有疫苗)(A) & $ p_{11}= $0.0003532567 & $ p_{12}= $0.4990447143 & $ p_{1+}= $0.499397971\\
+%		对照组(无疫苗)($ \bar{A} $) & $ p_{21}= $0.0001418002 & $ p_{22}= $0.5004602288& $ p_{2+}= $0.500602029\\
+%		\midrule[1pt]
+%		合计 & $ p_{+1}= $0.0004950569 & $ p_{+2}= $0.9995049431 & 1\\
+%		\bottomrule[1.5pt]
+%	\end{tabular}
+%\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+显然为一个单侧给定的四格表,要看B有效,需要对四格表进行检验.如果B有效,那么有属性良好的个体中有属性品种B的比例高.
+
+\end{solution}
+
+\begin{lstlisting}[language=r]
+> x<-matrix(c(783,117,53,47),nrow=2)
+> fgtest_1=function(x)
++ {
+	+    U=sqrt(sum(x))*(x[1]*x[4]-x[2]*x[3])/sqrt(((x[1]+x[2])*(x[3]+x[4])*(x[1]+x[3])*(x[2]+x[4])))  #卡方统计量
+	+ 	 p_value=pnorm(-U);p_value
+	+ }
+> fgtest_1(x)
+[1] 1.504138e-18
+\end{lstlisting}
+p值大于$ \alpha $=0.001,故否定原假设,认为有属性长势良好的个体中有属B的比例高,即B有效.\\
+
+
+\end{document}
